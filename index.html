@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=280, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать</h1>
+        <p>Монеты: <span id="currentCoins">0</span></p>
+        <button id="claimButton">CLAIM</button>
+        <p id="countdown"></p>
+        <a href="wallet.html">WALLET</a>
+        <a href="tasks.html">TASKS</a>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Функция для обновления текущего количества монет на странице
+        function updateCoinsDisplay(coins) {
+            const currentCoinsElement = document.getElementById('currentCoins');
+            if (currentCoinsElement) {
+                currentCoinsElement.textContent = coins;
+            }
+        }
+
+        // Вызов функции для обновления начального значения монет при загрузке страницы
+        updateCoinsDisplay(parseInt(localStorage.getItem('coins')) || 0);
+    </script>
+</body>
+</html>

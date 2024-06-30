@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=280, initial-scale=1.0">
+    <title>Админка</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Админка</h1>
+        <form id="addTaskForm">
+            <input type="text" id="taskName" placeholder="Имя задания" required>
+            <input type="url" id="taskLink" placeholder="Ссылка на задание" required>
+            <input type="number" id="taskReward" placeholder="Вознаграждение за задание" required>
+            <button type="submit">Добавить задание</button>
+        </form>
+        <ul id="adminTasksList">
+            <!-- Динамически добавляемые задания -->
+        </ul>
+        <a href="index.html">Назад</a>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=280, initial-scale=1.0">
+    <title>Кошелек</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Кошелек</h1>
+        <p>Ваш баланс: <span id="walletBalance"></span> монет</p>
+        <a href="index.html">Назад</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const walletBalance = document.getElementById('walletBalance');
+            let coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
+            walletBalance.textContent = coins;
+        });
+    </script>
+</body>
+</html>
