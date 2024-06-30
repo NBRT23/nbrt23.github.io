@@ -178,11 +178,3 @@ document.addEventListener('DOMContentLoaded', function() {
         loadAdminTasks();
     }
 });
-
-let usercard = document.getElementById("usercard");
-
-let p = document.createElement("p");
-
-p.innerText = `${tg.initDataUnsafe.user.id};
-
-usercard.appendChild(p);
