@@ -2,12 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const claimButton = document.getElementById('claimButton');
     const countdownElement = document.getElementById('countdown');
     const currentCoinsElement = document.getElementById('currentCoins');
-    const claimInterval = 0.08 * 60 * 60 * 1000; // 8 часов в миллисекундах
+    const claimInterval = 8 * 60 * 60 * 1000; // 8 часов в миллисекундах
     const maxCoins = 100; // Максимальное количество монет за период
     const taskRewardInterval = 1 * 60 * 1000; // Интервал для зачисления вознаграждения за задание (1 минута)
 
     let lastClaimTime = localStorage.getItem('lastClaimTime');
-    let coins = localStorage.getItem('coins') ? parseInt(localStorage.getItem('coins')) : 0;
+    let coins = localStorage.getItem('coins') ? parseFloat(localStorage.getItem('coins')) : 0.000;
+
+    function formatCoins(coins) {
+        return coins.toFixed(3);
+    }
 
     function updateTimer() {
         if (claimButton && countdownElement && currentCoinsElement) {
@@ -18,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (timeToNextClaim <= 0) {
                 claimButton.disabled = false;
                 countdownElement.textContent = 'Сейчас можно собрать!';
-                currentCoinsElement.textContent = maxCoins; // Показать максимальное количество монет
+                currentCoinsElement.textContent = formatCoins(maxCoins); // Показать максимальное количество монет
             } else {
                 claimButton.disabled = true;
                 const hours = Math.floor((timeToNextClaim % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -27,8 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 countdownElement.textContent = `${hours}ч ${minutes}м ${seconds}с`;
 
                 // Обновление текущего количества нафармленных монет
-                const currentCoins = Math.floor((timeSinceLastClaim / claimInterval) * maxCoins);
-                currentCoinsElement.textContent = currentCoins;
+                const currentCoins = (timeSinceLastClaim / claimInterval) * maxCoins;
+                currentCoinsElement.textContent = formatCoins(currentCoins);
             }
         }
     }
@@ -90,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('coins', coins);
 
             if (currentCoinsElement) {
-                currentCoinsElement.textContent = coins;
+                currentCoinsElement.textContent = formatCoins(coins);
             }
         }, taskRewardInterval); // Интервал для зачисления вознаграждения в миллисекундах
     };
@@ -174,4 +178,3 @@ document.addEventListener('DOMContentLoaded', function() {
         loadAdminTasks();
     }
 });
-
