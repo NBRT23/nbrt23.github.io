@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const taskRewardInterval = 1 * 60 * 1000; // Интервал для зачисления вознаграждения за задание (1 минута)
 
     let lastClaimTime = localStorage.getItem('lastClaimTime');
-    let coins = localStorage.getItem('coins') ? parseFloat(localStorage.getItem('coins')) : 0.000;
+    let coins = localStorage.getItem('coins') ? parseFloat(localStorage.getItem('coins')) : 0;
 
-    function formatCoins(coins) {
-        return coins.toFixed(3);
+    function formatCoins(value) {
+        return value.toFixed(3);
     }
 
     function updateTimer() {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Добавляем награду за выполненное задание к общему счету монет
-            const taskReward = parseInt(document.getElementById(`reward_${taskId}`).textContent);
+            const taskReward = parseFloat(document.getElementById(`reward_${taskId}`).textContent);
             coins += taskReward; // Добавляем вознаграждение к общему счету монет
             localStorage.setItem('coins', coins);
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const taskName = document.getElementById('taskName').value;
             const taskLink = document.getElementById('taskLink').value;
-            const taskReward = parseInt(document.getElementById('taskReward').value); // Получаем значение вознаграждения
+            const taskReward = parseFloat(document.getElementById('taskReward').value); // Получаем значение вознаграждения
 
             const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
             const taskId = `task_${tasks.length + 1}`;
