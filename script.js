@@ -144,7 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Обновление списка в админке
             loadAdminTasks();
             
-            // Очистка кэша и перезагрузка страницы TASKS
+            // Очистка кэша и перезагрузка страницы TASKS с уникальным ключом
+            sessionStorage.setItem('tasksCacheBuster', Date.now());
             location.reload();
         });
     }
@@ -185,4 +186,11 @@ document.addEventListener('DOMContentLoaded', function() {
             initializeTasks();
         }
     });
+
+    // Принудительное обновление tasks.html при загрузке
+    const cacheBuster = sessionStorage.getItem('tasksCacheBuster');
+    if (cacheBuster) {
+        initializeTasks();
+        sessionStorage.removeItem('tasksCacheBuster');
+    }
 });
