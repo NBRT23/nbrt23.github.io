@@ -145,8 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
             loadAdminTasks();
             
             // Очистка кэша и перезагрузка страницы TASKS
-            localStorage.removeItem('tasks');
-            localStorage.setItem('tasks', JSON.stringify(tasks));
             location.reload();
         });
     }
