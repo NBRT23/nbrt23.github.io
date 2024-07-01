@@ -95,6 +95,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }, taskRewardInterval); // Интервал для зачисления вознаграждения в миллисекундах
     };
 
+    // Функция для загрузки заданий с сервера
+    function loadTasksFromServer() {
+        fetch('loadTasks.php')
+            .then(response => response.json())
+            .then(tasks => {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                initializeTasks();
+            })
+            .catch(error => console.error('Error loading tasks:', error));
+    }
+
+    // Функция для сохранения заданий на сервере
+    function saveTasksToServer(tasks) {
+        fetch('saveTasks.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'tasks=' + encodeURIComponent(JSON.stringify(tasks))
+        })
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.error('Error saving tasks:', error));
+    }
+
     // Добавляем обработчики событий для кнопок на странице TASKS
     function initializeTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -124,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Инициализация заданий на странице TASKS
-    initializeTasks();
+    loadTasksFromServer();
 
     // Админка: добавление и удаление заданий
     const addTaskForm = document.getElementById('addTaskForm');
@@ -140,13 +165,10 @@ document.addEventListener('DOMContentLoaded', function() {
             tasks.push({ id: taskId, name: taskName, link: taskLink, reward: taskReward });
             localStorage.setItem('tasks', JSON.stringify(tasks));
             initializeTasks();
+            saveTasksToServer(tasks); // Сохранение заданий на сервере
 
             // Обновление списка в админке
             loadAdminTasks();
-            
-            // Очистка кэша и перезагрузка страницы TASKS с уникальным ключом
-            sessionStorage.setItem('tasksCacheBuster', Date.now());
-            location.reload();
         });
     }
 
@@ -173,6 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('tasks', JSON.stringify(tasks));
         initializeTasks();
         loadAdminTasks();
+        saveTasksToServer(tasks); // Сохранение заданий на сервере
     };
 
     // Инициализация списка заданий в админке
@@ -183,14 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обновление списка заданий при возвращении на вкладку
     document.addEventListener('visibilitychange', function() {
         if (document.visibilityState === 'visible') {
-            initializeTasks();
+            loadTasksFromServer();
         }
     });
-
-    // Принудительное обновление tasks.html при загрузке
-    const cacheBuster = sessionStorage.getItem('tasksCacheBuster');
-    if (cacheBuster) {
-        initializeTasks();
-        sessionStorage.removeItem('tasksCacheBuster');
-    }
 });
