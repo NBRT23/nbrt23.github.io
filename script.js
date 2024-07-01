@@ -9,10 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastClaimTime = localStorage.getItem('lastClaimTime');
     let coins = localStorage.getItem('coins') ? parseFloat(localStorage.getItem('coins')) : 0;
 
-    function formatCoins(value) {
-        return value.toFixed(3);
-    }
-
     function updateTimer() {
         if (claimButton && countdownElement && currentCoinsElement) {
             const currentTime = new Date().getTime();
@@ -22,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (timeToNextClaim <= 0) {
                 claimButton.disabled = false;
                 countdownElement.textContent = 'Сейчас можно собрать!';
-                currentCoinsElement.textContent = formatCoins(maxCoins); // Показать максимальное количество монет
+                currentCoinsElement.textContent = maxCoins.toFixed(3); // Показать максимальное количество монет
             } else {
                 claimButton.disabled = true;
                 const hours = Math.floor((timeToNextClaim % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -32,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Обновление текущего количества нафармленных монет
                 const currentCoins = (timeSinceLastClaim / claimInterval) * maxCoins;
-                currentCoinsElement.textContent = formatCoins(currentCoins);
+                currentCoinsElement.textContent = currentCoins.toFixed(3);
             }
         }
     }
@@ -40,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function claimCoins() {
         const currentTime = new Date().getTime();
         coins += maxCoins;
-        localStorage.setItem('coins', coins);
+        localStorage.setItem('coins', coins.toFixed(3));
         lastClaimTime = currentTime;
         localStorage.setItem('lastClaimTime', lastClaimTime);
         updateTimer();
@@ -91,10 +87,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Добавляем награду за выполненное задание к общему счету монет
             const taskReward = parseFloat(document.getElementById(`reward_${taskId}`).textContent);
             coins += taskReward; // Добавляем вознаграждение к общему счету монет
-            localStorage.setItem('coins', coins);
+            localStorage.setItem('coins', coins.toFixed(3));
 
             if (currentCoinsElement) {
-                currentCoinsElement.textContent = formatCoins(coins);
+                currentCoinsElement.textContent = coins.toFixed(3);
             }
         }, taskRewardInterval); // Интервал для зачисления вознаграждения в миллисекундах
     };
@@ -102,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Добавляем обработчики событий для кнопок на странице TASKS
     function initializeTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        console.log("Loaded tasks:", tasks); // Для диагностики
 
         const tasksList = document.getElementById('tasksList');
         if (tasksList) {
@@ -146,11 +143,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Обновление списка в админке
             loadAdminTasks();
+            
+            // Очистка кэша и перезагрузка страницы TASKS
+            localStorage.removeItem('tasks');
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            location.reload();
         });
     }
 
     function loadAdminTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        console.log("Admin tasks loaded:", tasks); // Для диагностики
         const adminTasksList = document.getElementById('adminTasksList');
         if (adminTasksList) {
             adminTasksList.innerHTML = '';
@@ -177,4 +180,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('adminTasksList')) {
         loadAdminTasks();
     }
+
+    // Обновление списка заданий при возвращении на вкладку
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+            initializeTasks();
+        }
+    });
 });
