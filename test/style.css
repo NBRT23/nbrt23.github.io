@@ -15,7 +15,7 @@ body {
 
 .lower {
     clip-path: polygon(0 100%, 0 0, 100% 100%);
-    background: linear-gradient(30deg, #6D17A6 -5%, transparent 30%);
+    background: linear-gradient(30deg, #6D17A6 -10%, transparent 30%);
 }
 
 .upper {
