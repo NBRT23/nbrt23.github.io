@@ -103,11 +103,11 @@
         lowerPyramid.position.y = -5;
 
         // Добавляем освещение
-        const light = new THREE.PointLight(0xffffff, 1, 100);
-        light.position.set(10, 10, 10);
-        scene.add(light);
+        const pointLight = new THREE.PointLight(0xffffff, 2, 100); // Сделали свет более интенсивным
+        pointLight.position.set(10, 10, 10);
+        scene.add(pointLight);
 
-        const ambientLight = new THREE.AmbientLight(0x404040); // Мягкое освещение
+        const ambientLight = new THREE.AmbientLight(0x404040, 2); // Увеличили интенсивность мягкого освещения
         scene.add(ambientLight);
 
         // Позиционирование камеры
@@ -131,3 +131,4 @@
     </script>
 </body>
 </html>
+
