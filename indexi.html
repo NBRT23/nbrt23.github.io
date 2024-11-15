@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gradient Background with Glass Shape</title>
+    <title>Gradient Background with 3D Shape</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> <!-- Подключение Three.js -->
     <style>
         body {
@@ -78,23 +78,16 @@
         const geometry2 = new THREE.CylinderGeometry(0, 5, 10, 4); // Нижняя часть пирамиды
         geometry2.rotateX(Math.PI); // Поворот нижней части
 
-        // Создаем стеклянный материал с красным оттенком
-        const glassMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0xff0000,             // Красный цвет
-            transparent: true,           // Делаем материал прозрачным
-            opacity: 0.5,                // Уровень прозрачности
-            roughness: 0,                // Гладкость материала (0 = полностью гладкий)
-            metalness: 0,                // Металлический эффект (0 = без металлического блеска)
-            transmission: 1,             // Прозрачность, подобная стеклу
-            ior: 1.5,                    // Индекс преломления (стекло обычно имеет IOR около 1.5)
-            thickness: 50,                // Толщина стекла
-            clearcoat: 1,                // Интенсивность покрытия (clearcoat)
-            clearcoatRoughness: 0        // Гладкость покрытия
+        // Создаем материал с красным цветом
+        const material = new THREE.MeshStandardMaterial({
+            color: 0xff0000,
+            metalness: 0.5,
+            roughness: 0.1
         });
 
         // Создаем сетки и добавляем их в сцену
-        const upperPyramid = new THREE.Mesh(geometry, glassMaterial);
-        const lowerPyramid = new THREE.Mesh(geometry2, glassMaterial);
+        const upperPyramid = new THREE.Mesh(geometry, material);
+        const lowerPyramid = new THREE.Mesh(geometry2, material);
         scene.add(upperPyramid);
         scene.add(lowerPyramid);
 
@@ -131,3 +124,4 @@
     </script>
 </body>
 </html>
+
